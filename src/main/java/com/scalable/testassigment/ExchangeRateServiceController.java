@@ -19,6 +19,7 @@ public class ExchangeRateServiceController {
     }
 
     //TODO: maybe it would be better to combine those two methods with default second parameter EUR?
+    //depends on the spec/frontend/users
     @GetMapping("exchangeRateService/v1/getEuroBasedRate")
     public Double getEuroBasedExchangeRate(@RequestParam(value = "currency") String currency) {
         return dataSource.getEuroBasedRate(currency);
@@ -33,5 +34,10 @@ public class ExchangeRateServiceController {
     @GetMapping("exchangeRateService/v1/getCurrenciesList")
     public Map getEuroBasedExchangeRate() {
         return dataSource.getCurrenciesUsagesMap();
+    }
+
+    @GetMapping("exchangeRateService/v1/getChartUrl")
+    public String getInteractiveChartUrl(@RequestParam(value = "currency") String currency) {
+        return dataSource.getChartUrl(currency);
     }
 }

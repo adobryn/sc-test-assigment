@@ -1,6 +1,7 @@
 package com.scalable.testassigment;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,11 @@ public class ECBDataSource {
     private Map<String, Integer> currenciesUsagesMap;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ECBDataSource.class);
+
+    //TODO: make URLs configurable
+    private static final String CHART_URL_PREFIX = "https://www.ecb.europa.eu/stats/policy_and_exchange_rates"
+            + "/euro_reference_exchange_rates/html/eurofxref-graph-";
+    private static final String CHART_URL_SUFFIX = ".en.html";
 
     public Double getEuroBasedRate(String currency){
         //TODO: better count those things as metrics
@@ -37,6 +43,10 @@ public class ECBDataSource {
         return currenciesUsagesMap;
     }
 
+    public String getChartUrl(String currency){
+        return CHART_URL_PREFIX
+                + currency.toLowerCase(Locale.ROOT) + CHART_URL_SUFFIX;
+    }
 
     //parses XML to fill the map
     public void initialiseRatesMap(Document doc){
