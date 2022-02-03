@@ -18,15 +18,16 @@ public class ExchangeRateServiceController {
         return "alive";
     }
 
+    //TODO: maybe it would be better to combine those two methods with default second parameter EUR?
     @GetMapping("exchangeRateService/v1/getEuroBasedRate")
     public Double getEuroBasedExchangeRate(@RequestParam(value = "currency") String currency) {
         return dataSource.getEuroBasedRate(currency);
     }
 
     @GetMapping("exchangeRateService/v1/getCustomBasedRate")
-    public Double getEuroBasedExchangeRate(@RequestParam(value = "currency1") String currency,
+    public Double getCustomBasedExchangeRate(@RequestParam(value = "currency1") String currency1,
             @RequestParam(value = "currency2") String currency2) {
-        return dataSource.getEuroBasedRate(currency);
+        return dataSource.getCustomBasedRate(currency1, currency2);
     }
 
     @GetMapping("exchangeRateService/v1/getCurrenciesList")

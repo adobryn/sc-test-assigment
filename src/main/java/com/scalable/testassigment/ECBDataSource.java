@@ -41,8 +41,15 @@ public class ECBDataSource {
         //TODO: better count those things as metrics
         currenciesUsagesMap.put(currency, currenciesUsagesMap.get(currency) + 1);
 
-        //TODO: add check if currency exists in the map
-        return euroBasedRatesMap.get(currency);
+        return euroBasedRatesMap.getOrDefault(currency, 1.0);
+    }
+
+    public Double getCustomBasedRate(String currency1, String currency2){
+        currenciesUsagesMap.put(currency1, currenciesUsagesMap.get(currency1) + 1);
+        currenciesUsagesMap.put(currency2, currenciesUsagesMap.get(currency2) + 1);
+
+        return euroBasedRatesMap.getOrDefault(currency1, 1.0)
+                / euroBasedRatesMap.getOrDefault(currency2, 1.0);
     }
 
     public Map getCurrenciesList(){
