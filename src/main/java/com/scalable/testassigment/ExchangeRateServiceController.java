@@ -40,4 +40,11 @@ public class ExchangeRateServiceController {
     public String getInteractiveChartUrl(@RequestParam(value = "currency") String currency) {
         return dataSource.getChartUrl(currency);
     }
+
+    @GetMapping("exchangeRateService/v1/convertCurrency")
+    public Double convertCurrency(@RequestParam(value = "currency1") String currency1,
+            @RequestParam(value = "amountOfCurrency1") Double amountOfCurrency1,
+            @RequestParam(value = "currency2") String currency2) {
+        return dataSource.convertCurrencyToAnother(currency1, amountOfCurrency1, currency2);
+    }
 }

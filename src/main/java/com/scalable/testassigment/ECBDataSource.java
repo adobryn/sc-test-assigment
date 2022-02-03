@@ -35,6 +35,7 @@ public class ECBDataSource {
         currenciesUsagesMap.put(currency1, currenciesUsagesMap.get(currency1) + 1);
         currenciesUsagesMap.put(currency2, currenciesUsagesMap.get(currency2) + 1);
 
+        //TODO: do we need to flip the currencies in the case when the second one is bigger?
         return euroBasedRatesMap.getOrDefault(currency1, 1.0)
                 / euroBasedRatesMap.getOrDefault(currency2, 1.0);
     }
@@ -46,6 +47,18 @@ public class ECBDataSource {
     public String getChartUrl(String currency){
         return CHART_URL_PREFIX
                 + currency.toLowerCase(Locale.ROOT) + CHART_URL_SUFFIX;
+    }
+
+    public Double convertCurrencyToAnother(String currency1, Double amountOfCurrency1, String currency2){
+        currenciesUsagesMap.put(currency1, currenciesUsagesMap.get(currency1) + 1);
+        currenciesUsagesMap.put(currency2, currenciesUsagesMap.get(currency2) + 1);
+
+        //TODO: check default value, maybe must be different for this usecase, 1 only for EUR
+        Double euroBasedRateOfCurrency1 = euroBasedRatesMap.getOrDefault(currency1, 1.0);
+        Double euroBasedRateOfCurrency2 = euroBasedRatesMap.getOrDefault(currency2, 1.0);
+
+        Double result = (amountOfCurrency1 * euroBasedRateOfCurrency2) / euroBasedRateOfCurrency1;
+        return result;
     }
 
     //parses XML to fill the map
