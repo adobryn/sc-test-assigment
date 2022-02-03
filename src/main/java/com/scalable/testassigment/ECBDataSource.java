@@ -1,15 +1,7 @@
 package com.scalable.testassigment;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -17,25 +9,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 @Component
 public class ECBDataSource {
     private Map<String, Double> euroBasedRatesMap;
     private Map<String, Integer> currenciesUsagesMap;
 
-    ECBDataSource(){
-        euroBasedRatesMap = new HashMap<>();
-        currenciesUsagesMap = new HashMap<>();
-
-        //TODO: if initial rates download failed, exit with error and close app
-        initialiseRatesMap();
-    }
-
-    //TODO: make URL configurable
-    private static final String RATES_URL = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
-
     private static final Logger LOGGER = LoggerFactory.getLogger(ECBDataSource.class);
+
+    ECBDataSource(){
+
+    }
 
     public Double getEuroBasedRate(String currency){
         //TODO: better count those things as metrics
@@ -58,8 +42,10 @@ public class ECBDataSource {
 
 
     //parses XML to fill the map
-    public void initialiseRatesMap(){
-        Document doc = downloadRates();
+    public void initialiseRatesMap(Document doc){
+        euroBasedRatesMap = new HashMap<>();
+        currenciesUsagesMap = new HashMap<>();
+
         doc.getDocumentElement().normalize();
 
         NodeList list = doc.getElementsByTagName("Cube");
@@ -80,20 +66,4 @@ public class ECBDataSource {
             }
         }
     }
-
-    //downloads euro based rates from the given URL as XML doc
-    private Document downloadRates(){
-        try (InputStream stream = new URL(RATES_URL).openStream()){
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-
-            //TODO: add check that downloaded document is not empty
-            Document doc = docBuilder.parse(stream);
-            return doc;
-        } catch(ParserConfigurationException | SAXException | IOException ex){
-            LOGGER.warn("Failed due to " + ex.getMessage());
-            return null;
-        }
-    }
-
 }
