@@ -27,3 +27,9 @@ currency. Parameter: currency
 
 ## convertCurrency
 Converts an amount in a given currency to another. Parameters: currency1, amountOfCurrency1, currency2
+
+# Usage with docker
+
+* compile and assembly the app using `mvn clean install`
+* build Dockerfile:. `docker build -t sc/test-assigment .`
+* run with `docker run -p 8080:8080 sc/test-assigment`
