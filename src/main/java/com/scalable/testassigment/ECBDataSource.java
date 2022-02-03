@@ -17,10 +17,6 @@ public class ECBDataSource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ECBDataSource.class);
 
-    ECBDataSource(){
-
-    }
-
     public Double getEuroBasedRate(String currency){
         //TODO: better count those things as metrics
         currenciesUsagesMap.put(currency, currenciesUsagesMap.get(currency) + 1);
@@ -28,6 +24,7 @@ public class ECBDataSource {
         return euroBasedRatesMap.getOrDefault(currency, 1.0);
     }
 
+    //TODO: do we need to round up here?
     public Double getCustomBasedRate(String currency1, String currency2){
         currenciesUsagesMap.put(currency1, currenciesUsagesMap.get(currency1) + 1);
         currenciesUsagesMap.put(currency2, currenciesUsagesMap.get(currency2) + 1);
@@ -36,7 +33,7 @@ public class ECBDataSource {
                 / euroBasedRatesMap.getOrDefault(currency2, 1.0);
     }
 
-    public Map getCurrenciesList(){
+    public Map getCurrenciesUsagesMap(){
         return currenciesUsagesMap;
     }
 

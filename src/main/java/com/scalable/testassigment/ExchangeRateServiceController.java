@@ -32,6 +32,6 @@ public class ExchangeRateServiceController {
 
     @GetMapping("exchangeRateService/v1/getCurrenciesList")
     public Map getEuroBasedExchangeRate() {
-        return dataSource.getCurrenciesList();
+        return dataSource.getCurrenciesUsagesMap();
     }
 }
