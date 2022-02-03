@@ -1,5 +1,6 @@
 package com.scalable.testassigment;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 @Component
 public class ECBDataSource {
@@ -37,11 +40,17 @@ public class ECBDataSource {
     public Double getEuroBasedRate(String currency){
         //TODO: better count those things as metrics
         currenciesUsagesMap.put(currency, currenciesUsagesMap.get(currency) + 1);
+
+        //TODO: add check if currency exists in the map
         return euroBasedRatesMap.get(currency);
     }
 
+    public Map getCurrenciesList(){
+        return currenciesUsagesMap;
+    }
 
-    //downloads rates from ECB and parses gotten XML to fill the map
+
+    //parses XML to fill the map
     public void initialiseRatesMap(){
         Document doc = downloadRates();
         doc.getDocumentElement().normalize();
@@ -65,18 +74,16 @@ public class ECBDataSource {
         }
     }
 
+    //downloads euro based rates from the given URL as XML doc
     private Document downloadRates(){
-        try {
+        try (InputStream stream = new URL(RATES_URL).openStream()){
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-
-            URL url = new URL(RATES_URL);
-            InputStream stream = url.openStream();
 
             //TODO: add check that downloaded document is not empty
             Document doc = docBuilder.parse(stream);
             return doc;
-        } catch(Exception ex){
+        } catch(ParserConfigurationException | SAXException | IOException ex){
             LOGGER.warn("Failed due to " + ex.getMessage());
             return null;
         }
